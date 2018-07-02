@@ -1,0 +1,62 @@
+﻿{include file='pub/header'/}
+<title>用户列表</title>
+</head>
+<body>
+<nav class="breadcrumb">{$breadNav} <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                       href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-c">
+                <th>用户名</th>
+                <th>手机号</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $userList as $d}
+                <tr>
+                    <td>
+                        {$d.name}
+                    </td>
+                    <td>
+                        {$d.telephone}
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="deldata('{$d.id}')">删除用户</button>
+                    </td>
+                </tr>
+
+            {/foreach}
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{include file="pub/footer"/}
+<script type="text/javascript">
+    $('.table-sort').dataTable();
+
+
+    /**
+     * 删除用户
+     */
+    function deldata(id){
+        layer.confirm('确定删除该用户？', function () {
+            $.post("{:url('delData')}", {id:id}, function (res) {
+                if(res.code == 1){
+                    location.reload();
+                }else{
+                    layer.alert(res.msg);
+                }
+            });
+        })
+    }
+
+</script>
+</body>
+</html>

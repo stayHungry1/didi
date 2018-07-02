@@ -1,0 +1,129 @@
+﻿{include file='pub/header'/}
+<title>司机列表</title>
+</head>
+<body>
+<nav class="breadcrumb">{$breadNav} <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                       href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-c">
+                <th>司机用户名</th>
+                <th>手机号</th>
+                <th>司机真实姓名</th>
+                <th>车型</th>
+                <th>车牌号</th>
+                <th>身份证号</th>
+                <th>准驾车型</th>
+                <th>初次领证日期</th>
+                <th>档案编号</th>
+                <th>司机状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $drivers as $d}
+                <tr>
+                    <td>
+                        {$d.name}
+                    </td>
+                    <td>
+                        {$d.telephone}
+                    </td>
+                    <td>
+                        {$d.rel_name}
+                    </td>
+                    <td>
+                        {$d.car}
+                    </td>
+                    <td>
+                        {$d.car_no}
+                    </td>
+                    <td>
+                        {$d.card_no}
+                    </td>
+                    <td>
+                        {$d.carModels}
+                    </td>
+                    <td>
+                        {$d.firstGetDocDate}
+                    </td>
+                    <td>
+                        {$d.archviesNo}
+                    </td>
+                    <td>
+                        {$status[$d.status]}
+                    </td>
+                    <td>
+                        {if $d.status==1}
+                        <button class="btn btn-secondary" onclick="shenhe('{$d.id}', 1)">审核通过</button>
+                        <button class="btn btn-secondary" onclick="shenhe('{$d.id}', 2)">审核拒绝</button>
+                        {/if}
+                        <button class="btn btn-secondary" onclick="verify_vin('{$d.id}')">验证VIN码</button>
+                        <button class="btn btn-secondary" onclick="deldata('{$d.id}')">删除用户</button>
+                    </td>
+                </tr>
+
+            {/foreach}
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{include file="pub/footer"/}
+<script type="text/javascript">
+    $('.table-sort').dataTable();
+
+    function shenhe(id, status){
+        if(status == 1){
+            layer.confirm('确定审核通过？', function () {
+                $.post("{:url('sure')}", {id:id}, function(res){
+                    if(res.code == 1){
+                        location.reload();
+                    }else{
+                        layer.alert(res.msg);
+                    }
+                });
+            });
+        }else{
+            layer.prompt({
+                title:'请输入拒绝原因？',
+            },function(value, index, elem){
+                $.post("{:url('refuse')}", {id:id, reason:value}, function (res) {
+                    if(res.code == 1){
+                        location.reload();
+                        layer.close(index);
+                    }else{
+                        layer.alert(res.msg)
+                    }
+                });
+
+            })
+        }
+    }
+    function verify_vin(vin) {
+        layer_show('司机验证信息', '{:url("getVinInfo")}?driver_id='+vin)
+    }
+
+    /**
+     * 删除用户
+     */
+    function deldata(id){
+        layer.confirm('确定删除该司机？', function () {
+            $.post("{:url('delData')}", {id:id}, function (res) {
+                if(res.code == 1){
+                    location.reload();
+                }else{
+                    layer.alert(res.msg);
+                }
+            });
+        })
+    }
+
+</script>
+</body>
+</html>

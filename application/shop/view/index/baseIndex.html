@@ -1,0 +1,29 @@
+{include file='pub/header'/}
+<title>我的桌面</title>
+</head>
+<body>
+<div class="page-container">
+    <form class="form form-horizontal" id="product_add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>用户总量：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data.user_num}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>司机总量：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data.driver_num}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>订单总量：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data.order_num}
+            </div>
+        </div>
+    </form>
+</div>
+{include file="pub/footer"/}
+</body>
+</html>
